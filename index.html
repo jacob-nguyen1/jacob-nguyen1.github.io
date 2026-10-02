@@ -113,7 +113,7 @@
       </div>
       <div class="body">
         <p class="eyebrow">Apr 2026 &middot; Solo</p>
-        <h3>Bare-metal RC Car</h3>
+        <h3><a class="title-link" href="rc-car.html">Bare-metal RC Car</a></h3>
         <p>
           An IR-remote car on an STM32F446 with no HAL and no Arduino: every peripheral is driven by
           register writes I looked up in the reference manual. It started as GPIO motor toggling and grew into closed-loop speed control.
@@ -121,12 +121,16 @@
         <ul>
           <li>IR commands captured by timer + DMA, so the CPU never polls for edges.</li>
           <li>PI speed control from wheel encoders, running at 100&nbsp;Hz.</li>
-          <li>The write-up covers the bugs: DMA clearing my interrupt flag, a 77% motor deadband, and more.</li>
         </ul>
+        <a class="teaser" href="rc-car.html#bugs">
+          <span class="teaser-label">Hardest bug</span>
+          The DMA was clearing my interrupt flag before the CPU ever saw it, so the car kept timing out.
+          The fix was a second capture channel on the same pin.
+        </a>
         <p class="tags"><span>C</span><span>STM32</span><span>DMA</span><span>Timers</span><span>PI control</span></p>
-        <p class="more-row">
-          <a class="more strong" href="rc-car.html">Read the write-up &rarr;</a>
-          <a class="more" href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car" target="_blank" rel="noopener">Source &rarr;</a>
+        <p class="cta-row">
+          <a class="btn primary" href="rc-car.html">Read the full write-up &rarr;</a>
+          <a class="btn" href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car" target="_blank" rel="noopener">Source</a>
         </p>
       </div>
     </article>
