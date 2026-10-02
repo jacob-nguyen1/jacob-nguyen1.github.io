@@ -107,7 +107,7 @@
                autoplay muted loop playsinline preload="metadata"
                aria-label="The RC car driving under IR remote control"></video>
         <div class="thumbs">
-          <button class="zoom" data-full="assets/img/rc-car-top.jpg"><img src="assets/img/rc-car-top.jpg" alt="Top view: STM32 Nucleo, L298N driver, and battery pack on the chassis" loading="lazy"></button>
+          <button class="zoom" data-full="assets/img/rc-car-top.jpg"><img src="assets/img/rc-car-top.jpg" alt="Top view: Nucleo board, DRV8833 motor drivers, and AA battery pack" loading="lazy"></button>
           <button class="zoom" data-full="assets/img/rc-car-side.jpg"><img src="assets/img/rc-car-side.jpg" alt="Side view of the RC car" loading="lazy"></button>
         </div>
       </div>
@@ -119,14 +119,15 @@
           register writes I looked up in the reference manual. It started as GPIO motor toggling and grew into closed-loop speed control.
         </p>
         <ul>
-          <li>Closed-loop PI speed control with feedforward, anti-windup clamping, and a 100&nbsp;Hz update.</li>
-          <li>NEC IR decoder: timer input capture + DMA captures all 66 protocol edges at 1&nbsp;MHz.</li>
-          <li>Fixed a DMA/CPU flag race by cross-mapping a second capture channel to the same pin as a dedicated IRQ source.</li>
-          <li>Dual-wheel encoder feedback with a SysTick watchdog to detect stopped wheels.</li>
-          <li>Driver library (GPIO, Timer, PWM, DMA, IR, UART) with typed enums and config structs.</li>
+          <li>IR commands captured by timer + DMA, so the CPU never polls for edges.</li>
+          <li>PI speed control from wheel encoders, running at 100&nbsp;Hz.</li>
+          <li>The write-up covers the bugs: DMA clearing my interrupt flag, a 77% motor deadband, and more.</li>
         </ul>
         <p class="tags"><span>C</span><span>STM32</span><span>DMA</span><span>Timers</span><span>PI control</span></p>
-        <a class="more" href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car" target="_blank" rel="noopener">Source on GitHub &rarr;</a>
+        <p class="more-row">
+          <a class="more strong" href="rc-car.html">Read the write-up &rarr;</a>
+          <a class="more" href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car" target="_blank" rel="noopener">Source &rarr;</a>
+        </p>
       </div>
     </article>
 

@@ -37,7 +37,7 @@ body {
 img, video, svg { display: block; max-width: 100%; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
-code { font-family: var(--mono); font-size: 0.9em; }
+code { font-family: var(--mono); font-size: 0.9em; font-variant-ligatures: none; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 
 .wrap { width: min(1040px, 100% - 32px); margin-inline: auto; }
@@ -184,4 +184,30 @@ dialog#lightbox .close {
   .mini li { grid-template-columns: 1fr; gap: 2px; }
   .skills { grid-template-columns: 1fr; gap: 2px; }
   .skills dd { margin-bottom: 10px; }
+}
+
+/* ---------- project write-up pages ---------- */
+.more.strong { font-weight: 600; }
+.post { max-width: 760px; padding: 40px 0 0; }
+.post h1 { margin-top: 4px; }
+.post h2 { margin: 48px 0 12px; font-size: 1.35rem; }
+.post p { margin: 12px 0; }
+.back { display: inline-block; margin-bottom: 28px; font-size: 0.9rem; color: var(--muted); }
+.post-links { margin: 0 0 28px; }
+.post-media { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 6px; border-radius: 12px; overflow: hidden; }
+.post-media video, .post-media img { width: 100%; height: 100%; aspect-ratio: 9 / 16; object-fit: cover; background: #08090a; }
+.post-media button:hover img { opacity: 0.85; }
+.spec { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.95rem; }
+.spec th, .spec td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.spec th { font-family: var(--mono); font-size: 0.78rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.spec td:first-child { white-space: nowrap; }
+.bug { margin: 20px 0; padding: 4px 20px 6px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; }
+.bug h3 { margin: 14px 0 0; }
+.post-foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+@media (max-width: 600px) {
+  .post-media { grid-template-columns: 1fr 1fr; }
+  .post-media video { grid-column: 1 / -1; aspect-ratio: 9 / 12; }
+  .post-media img { aspect-ratio: 1; }
+  .spec td:first-child { white-space: normal; }
+  .bug { padding: 2px 14px 4px; }
 }
