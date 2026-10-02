@@ -3,43 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bare-metal RC Car | Jacob Nguyen</title>
-  <meta name="description" content="An IR-remote car on an STM32F446 with register-level drivers, DMA IR decoding, and PI speed control. What I built and the bugs that taught me the most.">
-  <meta property="og:title" content="Bare-metal RC Car | Jacob Nguyen">
+  <title>Bare-metal RC car | Jacob Nguyen</title>
+  <meta name="description" content="An IR-remote car on an STM32F446 with register-level drivers, DMA IR decoding, and PI speed control.">
+  <meta property="og:title" content="Bare-metal RC car | Jacob Nguyen">
   <meta property="og:image" content="https://jacob-nguyen1.github.io/assets/img/rc-car-top.jpg">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23111214'/%3E%3Cpath d='M4 22h6V10h6v12h6V10h6' fill='none' stroke='%23ff9f1c' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
+<main class="page post">
+  <a class="back" href="./">&larr; Jacob Nguyen</a>
 
-<header class="nav">
-  <div class="wrap nav-inner">
-    <a class="brand" href="./">jacob<span>.</span>nguyen</a>
-    <nav>
-      <a href="./#projects">Projects</a>
-      <a href="./#experience">Experience</a>
-      <a href="Jacob_Nguyen_Resume.pdf" target="_blank" rel="noopener">Resume</a>
-    </nav>
-  </div>
-</header>
-
-<main class="wrap post">
-  <a class="back" href="./#projects">&larr; All projects</a>
-
-  <p class="eyebrow">Apr 2026 &middot; Solo &middot; C on STM32F446</p>
-  <h1>Bare-metal RC Car</h1>
-  <p class="lede">
-    An IR-remote car where I wrote every peripheral driver from the reference manual, with no HAL and no Arduino.
-    I started it to actually understand timers, DMA, and interrupts instead of calling library functions that hide them.
-  </p>
-  <p class="post-links">
-    <a class="btn" href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car" target="_blank" rel="noopener">Source on GitHub</a>
+  <h1>Bare-metal RC car</h1>
+  <p>
+    An IR-remote car on an STM32F446 where I wrote every peripheral driver from the reference manual, without the HAL.
+    I started it because I wanted to actually understand timers, DMA, and interrupts instead of calling library functions that hide them.
+    The code is <a href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car">on GitHub</a>.
   </p>
 
-  <div class="post-media">
+  <div class="gallery">
     <video src="assets/video/rc-car.mp4" poster="assets/img/rc-car-poster.jpg"
            autoplay muted loop playsinline preload="metadata"
            aria-label="The RC car driving under IR remote control"></video>
@@ -48,109 +32,70 @@
   </div>
 
   <h2>What it does</h2>
-  <ul>
-    <li>Decodes NEC IR remote commands (forward, reverse, pivot, 9 speed levels).</li>
-    <li>Drives four TT motors with 20&nbsp;kHz PWM through two DRV8833 H-bridges.</li>
-    <li>Holds a target wheel speed with a PI loop fed by wheel encoders, with a remote button to switch between open and closed loop.</li>
-    <li>Stops the motors if it loses the remote signal for 200&nbsp;ms.</li>
+  <p>
+    It decodes NEC commands from a cheap IR remote (forward, reverse, pivot, and nine speed levels) and drives four
+    TT motors through two DRV8833 H-bridges at 20&nbsp;kHz PWM. Wheel encoders feed a PI loop that holds a target speed,
+    and a button on the remote switches between open and closed loop. If the remote goes quiet for 200&nbsp;ms, the motors stop.
+  </p>
+
+  <h2>How the timers are split up</h2>
+  <p>Almost everything ends up being a hardware timer:</p>
+  <table class="spec">
+    <tr><td>TIM3 + DMA1 Stream 4</td><td>Input capture on the IR receiver. DMA copies each edge timestamp into a 66-entry buffer at 1&nbsp;µs resolution, so the CPU never polls.</td></tr>
+    <tr><td>TIM4</td><td>Four channels of 20&nbsp;kHz PWM to the motor drivers.</td></tr>
+    <tr><td>TIM2</td><td>Input capture on both wheel encoders. It's 32-bit, so slow wheels don't overflow it.</td></tr>
+    <tr><td>TIM6, TIM7</td><td>Watchdogs. One throws away half-received IR packets, the other stops the motors after 200&nbsp;ms of silence.</td></tr>
+    <tr><td>SysTick</td><td>Runs the PI loop at 100&nbsp;Hz and a stopped-wheel check at 1&nbsp;kHz.</td></tr>
+    <tr><td>USART2</td><td>printf over the ST-Link for debugging.</td></tr>
+  </table>
+
+  <h2>Bugs worth writing down</h2>
+
+  <h3>DMA was eating my interrupt flag</h3>
+  <p>
+    Once DMA was capturing the IR edges, my timer interrupt stopped firing completely. The watchdog never got reset, so the car timed out constantly.
+    The capture flag CC1IF clears when CCR1 is read, and the DMA reads CCR1 on every edge, so the flag was gone before the CPU could see it.
+  </p>
+  <p>
+    I fixed it by mapping a second capture channel (IC2) onto the same input pin. Every edge now sets two flags:
+    DMA consumes CC1IF, and the CPU gets CC2IF, which nothing else touches.
+  </p>
+
+  <h3>Motors wouldn't spin below 77% duty</h3>
+  <p>
+    At 20&nbsp;kHz the motors had a huge deadband, which left the PI loop almost nothing to work with.
+    I was pulsing IN1 and holding IN2 low, which puts the DRV8833 in fast decay during the off-time.
+    The coil current collapsed between every pulse, so most of each on-time went to building it back up.
+    Holding IN2 high and pulsing an inverted signal on IN1 switches the chip to slow decay instead.
+    The current keeps circulating between pulses, and the deadband dropped to 33%.
+  </p>
+
+  <h3>The car would coast to a stop and never restart</h3>
+  <p>
+    Speed came from the time between encoder edges. When a wheel stopped, the edges stopped too, so the last reading (fast) stayed there forever.
+    The controller thought the car was cruising and kept the duty too low to overcome static friction.
+    Now a 1&nbsp;kHz check compares TIM2's counter to the last capture, and if 200&nbsp;ms pass with no edge, the wheel is treated as stopped.
+  </p>
+
+  <h3>The first move after boot lasted three times too long</h3>
+  <p>
+    The timer prescaler and auto-reload registers are buffered: a new value doesn't take effect until the next update event.
+    So the first timeout ran with the reset value of ARR (655&nbsp;ms instead of 200&nbsp;ms).
+    Setting the UG bit at the end of timer init forces an update and loads the new values immediately.
+  </p>
+
+  <h3>Smaller ones</h3>
+  <ul class="plain">
+    <li>A uint8_t speed parameter wrapped −50 into 206, which meant full throttle instead of stop. It's an int32_t now, clamped in the driver.</li>
+    <li>Disabling a DMA stream mid-transfer sets its transfer-complete flag, which sent my reset interrupt into a loop. I now stop the timer's DMA requests before touching the stream.</li>
+    <li>A printf inside an interrupt made a race condition disappear, because the UART delay covered up the timing problem. I toggle a GPIO and watch it on the scope instead.</li>
+    <li>Header pins pushed into the motor driver boards without solder gave floating outputs. They worked once they were soldered.</li>
   </ul>
 
-  <h2>How it's put together</h2>
-  <p>Almost everything is a hardware timer. Here's how I split them up:</p>
-  <table class="spec">
-    <thead><tr><th>Peripheral</th><th>Job</th></tr></thead>
-    <tbody>
-      <tr><td><code>TIM3</code> + DMA1 Stream 4</td><td>Input capture on the IR receiver. DMA copies each edge timestamp into a 66-entry buffer at 1&nbsp;MHz resolution, so the CPU never polls.</td></tr>
-      <tr><td><code>TIM4</code></td><td>4-channel 20&nbsp;kHz PWM to the motor drivers.</td></tr>
-      <tr><td><code>TIM2</code></td><td>Input capture on the left and right wheel encoders (it's 32-bit, so slow wheels don't overflow it).</td></tr>
-      <tr><td><code>TIM6</code> / <code>TIM7</code></td><td>Watchdogs: one resets a half-received IR packet, the other kills the motors after 200&nbsp;ms of silence.</td></tr>
-      <tr><td><code>SysTick</code></td><td>Runs the PI loop at 100&nbsp;Hz and a stopped-wheel check at 1&nbsp;kHz.</td></tr>
-      <tr><td><code>USART2</code></td><td><code>printf</code> over the ST-Link for debugging.</td></tr>
-    </tbody>
-  </table>
-  <p>
-    The drivers (GPIO, Timer, PWM, DMA, IR, UART) each get their own <code>.c/.h</code> pair with typed enums and config structs,
-    and tuning values live in one <code>config.h</code>.
-  </p>
-
-  <h2 id="bugs">Bugs that taught me the most</h2>
-
-  <section class="bug">
-    <h3>1. The DMA was eating my interrupt flag</h3>
-    <p>
-      When DMA captured the IR edges, my timer interrupt stopped firing completely, so the watchdog never got reset and the car timed out constantly.
-      It turns out the capture flag <code>CC1IF</code> clears when <code>CCR1</code> is read. The DMA reads <code>CCR1</code> on every edge,
-      so it cleared the flag before the CPU ever saw it.
-    </p>
-    <p>
-      <strong>Fix:</strong> I mapped a second capture channel (IC2) onto the same input pin with <code>CC2S</code>.
-      Now every edge sets two flags: DMA consumes <code>CC1IF</code>, and the CPU gets its own <code>CC2IF</code> that nothing else touches.
-    </p>
-  </section>
-
-  <section class="bug">
-    <h3>2. Motors wouldn't spin below 77% duty</h3>
-    <p>
-      At 20&nbsp;kHz the motors had a huge deadband, which left the PI loop almost no range to work with.
-      I was pulsing <code>IN1</code> and holding <code>IN2</code> low, which puts the DRV8833 in <em>fast decay</em> during the off-phase.
-      The coil current collapsed between every pulse, so most of each on-phase went to building it back up.
-    </p>
-    <p>
-      <strong>Fix:</strong> I held <code>IN2</code> high and pulsed an inverted PWM on <code>IN1</code>, which switches the chip to <em>slow decay</em>.
-      The current keeps circulating between pulses, and the deadband dropped from 77% to 33%.
-    </p>
-  </section>
-
-  <section class="bug">
-    <h3>3. The car would coast to a stop and never restart</h3>
-    <p>
-      Speed was measured from the time between encoder edges. When a wheel stopped, the edges stopped too, so the last measured speed (fast) stayed in place forever.
-      The controller thought the car was cruising and kept the PWM too low to overcome static friction.
-    </p>
-    <p>
-      <strong>Fix:</strong> a 1&nbsp;kHz check in SysTick compares <code>TIM2-&gt;CNT</code> to the last capture.
-      If 200&nbsp;ms pass with no edge, the wheel is marked stopped and the loop drives it back up.
-    </p>
-  </section>
-
-  <section class="bug">
-    <h3>4. The first move after boot lasted 3&times; too long</h3>
-    <p>
-      Timer <code>PSC</code> and <code>ARR</code> are preloaded (shadow) registers. Writing them doesn't take effect until the next update event,
-      so the first timeout ran with the reset value of <code>ARR</code> (655&nbsp;ms instead of 200&nbsp;ms).
-    </p>
-    <p>
-      <strong>Fix:</strong> <code>TIMx-&gt;EGR |= TIM_EGR_UG</code> at the end of timer init forces an update so the new values load immediately.
-    </p>
-  </section>
-
-  <section class="bug">
-    <h3>5. Smaller ones worth remembering</h3>
-    <ul>
-      <li>A <code>uint8_t</code> speed parameter silently wrapped <code>-50</code> into <code>206</code> (full throttle instead of stop). It's an <code>int32_t</code> now, clamped at the driver.</li>
-      <li>Disabling a DMA stream mid-transfer sets its transfer-complete flag, which sent my reset ISR into a loop. I now stop the timer's DMA requests before touching the stream.</li>
-      <li>A <code>printf</code> in an ISR made a race condition disappear, because the UART delay hid the timing bug. I use GPIO toggles on the scope for timing now.</li>
-      <li>Push-in header pins on the motor drivers gave floating outputs. They work once they're actually soldered.</li>
-    </ul>
-  </section>
-
-  <p class="post-foot">
-    <a href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car" target="_blank" rel="noopener">Source on GitHub &rarr;</a>
-    <a href="./#projects">&larr; Back to projects</a>
-  </p>
+  <p style="margin-top: 48px"><a href="./">&larr; Back</a></p>
 </main>
 
-<footer class="wrap footer">
-  <p><a href="mailto:jacobnguyen.dev@gmail.com">jacobnguyen.dev@gmail.com</a> &middot;
-    <a href="https://github.com/jacob-nguyen1" target="_blank" rel="noopener">GitHub</a> &middot;
-    <a href="https://www.linkedin.com/in/jacobnguyen7" target="_blank" rel="noopener">LinkedIn</a></p>
-</footer>
-
-<dialog id="lightbox">
-  <img alt="">
-  <button class="close" aria-label="Close">&times;</button>
-</dialog>
-
-<script src="main.js?v=3"></script>
+<dialog id="lightbox"><img alt=""></dialog>
+<script src="main.js?v=4"></script>
 </body>
 </html>
