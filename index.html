@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jacob Nguyen | Embedded Firmware</title>
+  <meta name="description" content="Jacob Nguyen: Computer Engineering at the University of Florida. Embedded firmware, RTOS, and FPGA work. NASA Armstrong co-op.">
+  <meta property="og:title" content="Jacob Nguyen | Embedded Firmware">
+  <meta property="og:description" content="Embedded firmware, RTOS, and FPGA work. Computer Engineering @ UF.">
+  <meta property="og:image" content="https://jacob-nguyen1.github.io/assets/img/rc-car-top.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23111214'/%3E%3Cpath d='M4 22h6V10h6v12h6V10h6' fill='none' stroke='%23ff9f1c' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">jacob<span>.</span>nguyen</a>
+    <nav>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="Jacob_Nguyen_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero wrap">
+    <img class="headshot" src="assets/img/headshot.jpg" alt="Jacob Nguyen" width="160" height="160">
+    <div>
+      <p class="eyebrow">Embedded &middot; Firmware &middot; FPGA</p>
+      <h1>Jacob Nguyen</h1>
+      <p class="lede">
+        Computer Engineering at the University of Florida (May 2028).
+        I write firmware close to the metal: register-level drivers, DMA, interrupts, RTOS tasks, and SystemVerilog.
+        Currently an embedded software co-op at <strong>NASA Armstrong Flight Research Center</strong>.
+      </p>
+      <div class="links">
+        <a class="btn primary" href="Jacob_Nguyen_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+        <a class="btn" href="https://github.com/jacob-nguyen1" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/jacobnguyen7" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="mailto:jacobnguyen.dev@gmail.com">Email</a>
+      </div>
+    </div>
+  </section>
+
+  <svg class="trace" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 45 H60 V15 H120 V45 H180 V15 H240 V45 H300 V15 H360 V45 H420 V15 H480 V45 H540 V15 H600 V45 H660 V15 H720 V45 H780 V15 H840 V45 H900 V15 H960 V45 H1020 V15 H1080 V45 H1140 V15 H1200"/>
+  </svg>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section id="experience" class="wrap section">
+    <h2><span class="addr">0x01</span> Experience</h2>
+
+    <article class="job">
+      <div class="job-head">
+        <div>
+          <h3>Embedded Software Engineer Intern</h3>
+          <p class="org">NASA Armstrong Flight Research Center &middot; Edwards AFB, CA</p>
+        </div>
+        <p class="when">Aug 2026 &ndash; Present</p>
+      </div>
+      <ul>
+        <li>Built a custom Yocto BSP for a Microchip PolarFire RISC-V SoC: device tree, U-Boot, and partition changes.</li>
+        <li>Developed cFS flight software modules in C for NASA's spaceflight computing platform targeting RISC-V.</li>
+        <li>Engineered embedded firmware in C for NASA's Raven eVTOL research aircraft on STM32 using Zephyr RTOS.</li>
+      </ul>
+      <p class="tags"><span>C</span><span>Yocto</span><span>RISC-V</span><span>cFS</span><span>Zephyr</span><span>STM32</span></p>
+    </article>
+
+    <article class="job">
+      <div class="job-head">
+        <div>
+          <h3>Firmware Engineer</h3>
+          <p class="org">Gator Motorsports (FSAE), University of Florida</p>
+        </div>
+        <p class="when">Oct 2025 &ndash; May 2026</p>
+      </div>
+      <ul>
+        <li>Wrote a register-level CAN FD driver in <code>no_std</code> Rust for the NXP i.MX RT1176, replacing C SDK wrappers.</li>
+        <li>Async transmit through a semaphore-gated mailbox pool with fair FIFO ordering across 7 TX buffers.</li>
+        <li>Interrupt-driven receive pipeline using a Global Unlock (TIMER read) to prevent hardware mailbox stalls.</li>
+        <li>Ported NXP's CAN FD bit-timing algorithm to Rust for automatic dual-rate prescaler and segment calculation.</li>
+      </ul>
+      <p class="tags"><span>Rust</span><span>Embassy</span><span>CAN FD</span><span>i.MX RT1176</span></p>
+    </article>
+
+    <article class="job">
+      <div class="job-head">
+        <div>
+          <h3>Teaching Assistant, Digital Logic</h3>
+          <p class="org">Herbert Wertheim College of Engineering, UF</p>
+        </div>
+        <p class="when">Jan 2026 &ndash; May 2026</p>
+      </div>
+      <ul>
+        <li>Taught a weekly lab section through progressive digital design labs, from basic gates up to a CPU.</li>
+        <li>Debugged breadboard wiring, timing violations, and FPGA logic errors for students during office hours.</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section id="projects" class="wrap section">
+    <h2><span class="addr">0x02</span> Projects</h2>
+
+    <!-- RC car: featured -->
+    <article class="project featured">
+      <div class="media media-car">
+        <video src="assets/video/rc-car.mp4" poster="assets/img/rc-car-poster.jpg"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="The RC car driving under IR remote control"></video>
+        <div class="thumbs">
+          <button class="zoom" data-full="assets/img/rc-car-top.jpg"><img src="assets/img/rc-car-top.jpg" alt="Top view: STM32 Nucleo, L298N driver, and battery pack on the chassis" loading="lazy"></button>
+          <button class="zoom" data-full="assets/img/rc-car-side.jpg"><img src="assets/img/rc-car-side.jpg" alt="Side view of the RC car" loading="lazy"></button>
+        </div>
+      </div>
+      <div class="body">
+        <p class="eyebrow">Apr 2026 &middot; Solo</p>
+        <h3>Bare-metal RC Car</h3>
+        <p>
+          An IR-remote car on an STM32F446 with no HAL and no Arduino: every peripheral is driven by
+          register writes I looked up in the reference manual. It started as GPIO motor toggling and grew into closed-loop speed control.
+        </p>
+        <ul>
+          <li>Closed-loop PI speed control with feedforward, anti-windup clamping, and a 100&nbsp;Hz update.</li>
+          <li>NEC IR decoder: timer input capture + DMA captures all 66 protocol edges at 1&nbsp;MHz.</li>
+          <li>Fixed a DMA/CPU flag race by cross-mapping a second capture channel to the same pin as a dedicated IRQ source.</li>
+          <li>Dual-wheel encoder feedback with a SysTick watchdog to detect stopped wheels.</li>
+          <li>Driver library (GPIO, Timer, PWM, DMA, IR, UART) with typed enums and config structs.</li>
+        </ul>
+        <p class="tags"><span>C</span><span>STM32</span><span>DMA</span><span>Timers</span><span>PI control</span></p>
+        <a class="more" href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car" target="_blank" rel="noopener">Source on GitHub &rarr;</a>
+      </div>
+    </article>
+
+    <div class="grid">
+      <!-- VGA Pong -->
+      <article class="project">
+        <div class="media">
+          <svg class="pong" viewBox="0 0 640 480" role="img" aria-label="Illustration of a two-player Pong frame">
+            <rect width="640" height="480" fill="#08090a"/>
+            <path d="M320 12 V468" stroke="#3a3d41" stroke-width="6" stroke-dasharray="18 14"/>
+            <g fill="#ff9f1c">
+              <rect x="36" y="150" width="14" height="90"/>
+              <rect x="590" y="260" width="14" height="90"/>
+              <rect x="402" y="196" width="14" height="14"/>
+            </g>
+            <g fill="#e8e6e3" font-family="JetBrains Mono, monospace" font-size="64" text-anchor="middle">
+              <text x="250" y="80">3</text><text x="390" y="80">2</text>
+            </g>
+            <text x="626" y="468" fill="#6b6f74" font-family="JetBrains Mono, monospace" font-size="16" text-anchor="end">640x480 @ 60Hz</text>
+          </svg>
+        </div>
+        <div class="body">
+          <p class="eyebrow">Mar 2026 &middot; FPGA</p>
+          <h3>VGA Pong</h3>
+          <p>Two-player Pong in pure hardware on a DE10-Lite. There is no CPU: the game logic, the renderer, and the VGA timing are all logic I wrote in SystemVerilog.</p>
+          <ul>
+            <li>640&times;480 @ 60&nbsp;Hz VGA from a 25&nbsp;MHz pixel clock.</li>
+            <li>FSM-driven game states; pixel-coordinate collision across 7 concurrent inputs.</li>
+            <li>BRAM ROM bitmaps with pipeline registers to compensate for 1-cycle read latency.</li>
+          </ul>
+          <p class="tags"><span>SystemVerilog</span><span>FPGA</span><span>VGA</span></p>
+        </div>
+      </article>
+
+      <!-- SwampRise -->
+      <article class="project">
+        <div class="media">
+          <button class="yt" data-id="9dNYDrCkIwc" aria-label="Play SwampRise demo video">
+            <img src="assets/img/swamprise-lcd.jpg" alt="LCD showing live bus arrival times" loading="lazy">
+            <span class="play" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="body">
+          <p class="eyebrow">Jan 2026 &middot; Hackathon, team of 4</p>
+          <h3>SwampRise Bus Alarm</h3>
+          <p>
+            An alarm clock that watches live campus bus data and moves your wake-up time when the bus runs late.
+            <strong>Won Best Integration of Hardware at SwampHacks XI.</strong>
+          </p>
+          <ul>
+            <li>ESP32 running dual-core FreeRTOS tasks for API polling, display refresh, and a web config UI.</li>
+            <li>DS3231 RTC over I&sup2;C, a 16&times;2 LCD through a 74HC595 shift register, and a 4-digit 7-segment display.</li>
+          </ul>
+          <p class="tags"><span>ESP32</span><span>C++</span><span>ESP-IDF</span><span>FreeRTOS</span></p>
+          <p class="more-row">
+            <button class="more zoom" data-full="assets/img/swamprise-schematic.png">Schematic</button>
+            <a class="more" href="https://devpost.com/software/swamp-rise" target="_blank" rel="noopener">Devpost &rarr;</a>
+            <a class="more" href="https://github.com/ethantayl/SwampRise" target="_blank" rel="noopener">Source &rarr;</a>
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <h3 class="sub">More on GitHub</h3>
+    <ul class="mini">
+      <li>
+        <a href="https://github.com/jacob-nguyen1/rtos-scheduler" target="_blank" rel="noopener">rtos-scheduler</a>
+        <span>C++ simulation comparing preemptive CPU schedulers (Round Robin, SJF, Priority, FCFS) with real-time visualization. Group project.</span>
+      </li>
+      <li>
+        <a href="https://github.com/jacob-nguyen1/Minesweeper-Bullet-Hell" target="_blank" rel="noopener">Minesweeper-Bullet-Hell</a>
+        <span>Minesweeper with a bullet hell mode. C++ and SFML, custom bullet physics and collision detection.</span>
+      </li>
+      <li>
+        <a href="https://github.com/jacob-nguyen1/jongo" target="_blank" rel="noopener">jongo</a>
+        <span>Japanese sentence analyzer written in Rust.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="wrap section">
+    <h2><span class="addr">0x03</span> Toolbox</h2>
+    <dl class="skills">
+      <dt>Languages</dt><dd>C, C++, Rust, Python, SystemVerilog, VHDL</dd>
+      <dt>Platforms</dt><dd>STM32, NXP i.MX RT, ESP32, AVR, PolarFire RISC-V, DE10-Lite</dd>
+      <dt>RTOS / OS</dt><dd>FreeRTOS, Zephyr, Embassy, cFS, Yocto Linux</dd>
+      <dt>Interfaces</dt><dd>CAN FD, I&sup2;C, SPI, UART, I&sup2;S, VGA, DMA</dd>
+      <dt>Bench</dt><dd>Oscilloscopes, logic analyzers, Quartus, QuestaSim</dd>
+    </dl>
+  </section>
+
+</main>
+
+<footer class="wrap footer">
+  <p>Looking for Summer 2027 embedded / firmware internships.
+    <a href="mailto:jacobnguyen.dev@gmail.com">jacobnguyen.dev@gmail.com</a></p>
+</footer>
+
+<dialog id="lightbox">
+  <img alt="">
+  <button class="close" aria-label="Close">&times;</button>
+</dialog>
+
+<script src="main.js"></script>
+</body>
+</html>
