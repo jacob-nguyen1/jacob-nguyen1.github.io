@@ -10,112 +10,157 @@
   <meta property="og:image" content="https://jacob-nguyen1.github.io/assets/img/rc-car-top.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
-<main class="page">
 
-  <header class="intro">
-    <img class="headshot" src="assets/img/headshot.jpg" alt="" width="88" height="88">
+<header class="hero">
+  <div class="wrap hero-inner">
+    <img class="headshot" src="assets/img/headshot.jpg" alt="" width="140" height="140">
     <div>
       <h1>Jacob Nguyen</h1>
-      <p>
+      <p class="bio">
         Computer Engineering student at the University of Florida, graduating in 2028.
         This fall I'm an embedded software co-op at NASA Armstrong Flight Research Center.
         I mostly work in C and Rust on microcontrollers, and I like figuring out how the hardware underneath actually works.
       </p>
-      <p class="links">
-        <a href="Jacob_Nguyen_Resume.pdf">Resume</a>
-        <a href="https://github.com/jacob-nguyen1">GitHub</a>
-        <a href="https://www.linkedin.com/in/jacobnguyen7">LinkedIn</a>
-        <a href="mailto:jacobnguyen.dev@gmail.com">jacobnguyen.dev@gmail.com</a>
-      </p>
+      <div class="buttons">
+        <a class="btn solid" href="Jacob_Nguyen_Resume.pdf">Resume</a>
+        <a class="btn ghost" href="https://github.com/jacob-nguyen1">GitHub</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/jacobnguyen7">LinkedIn</a>
+        <a class="btn ghost" href="mailto:jacobnguyen.dev@gmail.com">Email</a>
+      </div>
     </div>
-  </header>
+  </div>
+</header>
+
+<main class="wrap">
 
   <section>
     <h2>Projects</h2>
 
-    <article class="project">
-      <div class="gallery">
-        <video src="assets/video/rc-car.mp4" poster="assets/img/rc-car-poster.jpg"
-               autoplay muted loop playsinline preload="metadata"
-               aria-label="The RC car driving under IR remote control"></video>
-        <button class="zoom" data-full="assets/img/rc-car-top.jpg"><img src="assets/img/rc-car-top.jpg" alt="Top view: Nucleo board, DRV8833 motor drivers, and AA battery pack" loading="lazy"></button>
-        <button class="zoom" data-full="assets/img/rc-car-side.jpg"><img src="assets/img/rc-car-side.jpg" alt="Side view of the car" loading="lazy"></button>
+    <article class="card featured">
+      <div class="featured-video">
+        <video poster="assets/img/rc-car-poster.jpg" autoplay muted loop playsinline preload="auto"
+               aria-label="The RC car driving under IR remote control">
+          <source src="assets/video/rc-car.webm" type="video/webm">
+          <source src="assets/video/rc-car.mp4" type="video/mp4">
+        </video>
       </div>
-      <h3><a href="rc-car.html">Bare-metal RC car</a> <span class="date">2026</span></h3>
-      <p>
-        An IR-remote car on an STM32F446, written without the HAL. Every driver (GPIO, timers, PWM, DMA, UART)
-        comes from the reference manual. Timer input capture and DMA record the remote's pulses, and a PI loop
-        holds wheel speed using encoder feedback.
-      </p>
-      <p>
-        The bug that took longest: once DMA was reading the capture register, my interrupt stopped firing,
-        because that read clears the flag before the CPU sees it. I ended up routing the same pin into a second
-        capture channel just for the CPU.
-      </p>
-      <p class="links">
-        <a href="rc-car.html">Write-up</a>
-        <a href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car">Source</a>
-      </p>
+      <div class="featured-body">
+        <h3><a href="rc-car.html">Bare-metal RC car</a></h3>
+        <p class="meta">STM32F446 &middot; C &middot; 2026</p>
+        <p>
+          An IR-remote car written without the HAL. Every driver (GPIO, timers, PWM, DMA, UART) comes from the
+          reference manual. Timer input capture and DMA record the remote's pulses, and a PI loop holds wheel speed
+          using encoder feedback.
+        </p>
+        <p>
+          The bug that took longest: once DMA was reading the capture register, my interrupt stopped firing,
+          because that read clears the flag before the CPU sees it. I ended up routing the same pin into a second
+          capture channel just for the CPU.
+        </p>
+        <div class="thumbs">
+          <button class="zoom" data-full="assets/img/rc-car-top.jpg"><img src="assets/img/rc-car-top.jpg" alt="Top view: Nucleo board, DRV8833 motor drivers, and AA battery pack" loading="lazy"></button>
+          <button class="zoom" data-full="assets/img/rc-car-side.jpg"><img src="assets/img/rc-car-side.jpg" alt="Side view of the car" loading="lazy"></button>
+        </div>
+        <div class="buttons">
+          <a class="btn solid" href="rc-car.html">Read the write-up</a>
+          <a class="btn outline" href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car">Source</a>
+        </div>
+      </div>
     </article>
 
-    <article class="project">
-      <h3>VGA Pong <span class="date">2026</span></h3>
-      <p>
-        Two-player Pong on a DE10-Lite FPGA, entirely in SystemVerilog with no CPU. It generates 640&times;480
-        VGA timing from a 25&nbsp;MHz pixel clock, runs the game as a state machine, and draws sprites from block RAM,
-        with an extra pipeline stage to line up the RAM's one-cycle read delay with the pixel position.
-      </p>
-    </article>
+    <div class="pair">
+      <article class="card">
+        <canvas class="pong" aria-label="Animated Pong court" role="img"></canvas>
+        <div class="card-body">
+          <h3>VGA Pong</h3>
+          <p class="meta">DE10-Lite FPGA &middot; SystemVerilog &middot; 2026</p>
+          <p>
+            Two-player Pong entirely in hardware, with no CPU. It generates 640&times;480 VGA timing from a 25&nbsp;MHz
+            pixel clock, runs the game as a state machine, and draws sprites from block RAM, with an extra pipeline
+            stage to line up the RAM's one-cycle read delay with the pixel position.
+          </p>
+        </div>
+      </article>
 
-    <article class="project">
-      <div class="gallery two">
-        <button class="yt" data-id="9dNYDrCkIwc" aria-label="Play the SwampRise demo video">
+      <article class="card">
+        <button class="yt card-media" data-id="9dNYDrCkIwc" aria-label="Play the SwampRise demo video">
           <img src="assets/img/swamprise-lcd.jpg" alt="LCD showing live bus arrival times" loading="lazy">
           <span class="play" aria-hidden="true"></span>
         </button>
-        <button class="zoom light" data-full="assets/img/swamprise-schematic.png"><img src="assets/img/swamprise-schematic.png" alt="SwampRise schematic: ESP32, DS3231 RTC, LCD via 74HC595, 7-segment display" loading="lazy"></button>
-      </div>
-      <h3>SwampRise <span class="date">2026</span></h3>
-      <p>
-        A hackathon alarm clock that follows live campus bus data and moves your alarm if the bus is running late.
-        It runs on an ESP32 with FreeRTOS, a DS3231 clock, an LCD, and a 7-segment display.
-        It won Best Integration of Hardware at SwampHacks XI.
-      </p>
-      <p class="links">
-        <a href="https://devpost.com/software/swamp-rise">Devpost</a>
-        <a href="https://github.com/ethantayl/SwampRise">Source</a>
-      </p>
-    </article>
+        <div class="card-body">
+          <h3>SwampRise</h3>
+          <p class="meta">ESP32 &middot; FreeRTOS &middot; 2026</p>
+          <p>
+            A hackathon alarm clock that follows live campus bus data and moves your alarm if the bus is running late,
+            with a DS3231 clock, an LCD, and a 7-segment display. It won Best Integration of Hardware at SwampHacks XI.
+          </p>
+          <p class="links">
+            <a href="https://devpost.com/software/swamp-rise">Devpost</a>
+            <button class="zoom textlink" data-full="assets/img/swamprise-schematic.png">Schematic</button>
+            <a href="https://github.com/ethantayl/SwampRise">Source</a>
+          </p>
+        </div>
+      </article>
+    </div>
 
-    <h3 class="minor">Smaller things</h3>
-    <ul class="plain">
-      <li><a href="https://github.com/jacob-nguyen1/rtos-scheduler">rtos-scheduler</a>: a C++ visualizer comparing CPU scheduling algorithms.</li>
-      <li><a href="https://github.com/jacob-nguyen1/Minesweeper-Bullet-Hell">Minesweeper-Bullet-Hell</a>: Minesweeper with a bullet hell mode, in C++ and SFML.</li>
-      <li><a href="https://github.com/jacob-nguyen1/jongo">jongo</a>: a Japanese sentence analyzer in Rust.</li>
-    </ul>
+    <div class="smalls">
+      <a class="card small" href="https://github.com/jacob-nguyen1/rtos-scheduler">
+        <h3>rtos-scheduler</h3>
+        <p>A C++ visualizer comparing CPU scheduling algorithms.</p>
+      </a>
+      <a class="card small" href="https://github.com/jacob-nguyen1/Minesweeper-Bullet-Hell">
+        <h3>Minesweeper Bullet Hell</h3>
+        <p>Minesweeper with a bullet hell mode, in C++ and SFML.</p>
+      </a>
+      <a class="card small" href="https://github.com/jacob-nguyen1/jongo">
+        <h3>jongo</h3>
+        <p>A Japanese sentence analyzer in Rust.</p>
+      </a>
+    </div>
   </section>
 
   <section>
     <h2>Experience</h2>
-    <dl class="xp">
-      <dt>NASA Armstrong Flight Research Center <span class="date">2026&ndash;</span></dt>
-      <dd>Embedded software co-op. A Yocto board support package for a PolarFire RISC-V SoC, cFS flight software modules, and Zephyr firmware for the Raven eVTOL research aircraft.</dd>
-
-      <dt>Gator Motorsports (Formula SAE) <span class="date">2025&ndash;2026</span></dt>
-      <dd>Firmware team. Wrote the CAN FD driver for the NXP i.MX RT1176 in <code>no_std</code> Rust, replacing the vendor's C SDK.</dd>
-
-      <dt>University of Florida <span class="date">2026</span></dt>
-      <dd>Teaching assistant for Digital Logic. Ran a weekly lab section and helped students debug breadboards and FPGA designs.</dd>
-    </dl>
+    <div class="xp">
+      <article class="card xp-card">
+        <p class="years">2026 &ndash; now</p>
+        <h3>NASA Armstrong Flight Research Center</h3>
+        <p class="role">Embedded software co-op</p>
+        <p>A Yocto board support package for a PolarFire RISC-V SoC, cFS flight software modules, and Zephyr firmware for the Raven eVTOL research aircraft.</p>
+      </article>
+      <article class="card xp-card">
+        <p class="years">2025 &ndash; 2026</p>
+        <h3>Gator Motorsports</h3>
+        <p class="role">Firmware team, Formula SAE</p>
+        <p>Wrote the CAN FD driver for the NXP i.MX RT1176 in no_std Rust, replacing the vendor's C SDK.</p>
+      </article>
+      <article class="card xp-card">
+        <p class="years">2026</p>
+        <h3>University of Florida</h3>
+        <p class="role">Teaching assistant, Digital Logic</p>
+        <p>Ran a weekly lab section and helped students debug breadboards and FPGA designs.</p>
+      </article>
+    </div>
   </section>
 
 </main>
 
+<footer class="footer">
+  <div class="wrap">
+    <p class="footer-name">Jacob Nguyen</p>
+    <p class="links">
+      <a href="mailto:jacobnguyen.dev@gmail.com">jacobnguyen.dev@gmail.com</a>
+      <a href="https://github.com/jacob-nguyen1">GitHub</a>
+      <a href="https://www.linkedin.com/in/jacobnguyen7">LinkedIn</a>
+    </p>
+  </div>
+</footer>
+
 <dialog id="lightbox"><img alt=""></dialog>
-<script src="main.js?v=4"></script>
+<script src="main.js?v=5"></script>
 </body>
 </html>

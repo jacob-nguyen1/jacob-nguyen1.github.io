@@ -9,24 +9,31 @@
   <meta property="og:image" content="https://jacob-nguyen1.github.io/assets/img/rc-car-top.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
-<main class="page post">
-  <a class="back" href="./">&larr; Jacob Nguyen</a>
+<header class="hero slim">
+  <div class="wrap post">
+    <a class="back" href="./">&larr; Jacob Nguyen</a>
+    <h1>Bare-metal RC car</h1>
+    <p class="bio">
+      An IR-remote car on an STM32F446 where I wrote every peripheral driver from the reference manual, without the HAL.
+      I started it because I wanted to actually understand timers, DMA, and interrupts instead of calling library functions that hide them.
+    </p>
+    <div class="buttons">
+      <a class="btn solid" href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car">Source on GitHub</a>
+    </div>
+  </div>
+</header>
 
-  <h1>Bare-metal RC car</h1>
-  <p>
-    An IR-remote car on an STM32F446 where I wrote every peripheral driver from the reference manual, without the HAL.
-    I started it because I wanted to actually understand timers, DMA, and interrupts instead of calling library functions that hide them.
-    The code is <a href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car">on GitHub</a>.
-  </p>
-
-  <div class="gallery">
-    <video src="assets/video/rc-car.mp4" poster="assets/img/rc-car-poster.jpg"
-           autoplay muted loop playsinline preload="metadata"
-           aria-label="The RC car driving under IR remote control"></video>
+<main class="wrap post">
+  <div class="media-row">
+    <video poster="assets/img/rc-car-poster.jpg" autoplay muted loop playsinline preload="auto"
+           aria-label="The RC car driving under IR remote control">
+      <source src="assets/video/rc-car.webm" type="video/webm">
+      <source src="assets/video/rc-car.mp4" type="video/mp4">
+    </video>
     <button class="zoom" data-full="assets/img/rc-car-top.jpg"><img src="assets/img/rc-car-top.jpg" alt="Top view: Nucleo board, DRV8833 motor drivers, and AA battery pack" loading="lazy"></button>
     <button class="zoom" data-full="assets/img/rc-car-side.jpg"><img src="assets/img/rc-car-side.jpg" alt="Side view of the car" loading="lazy"></button>
   </div>
@@ -51,51 +58,75 @@
 
   <h2>Bugs worth writing down</h2>
 
-  <h3>DMA was eating my interrupt flag</h3>
-  <p>
-    Once DMA was capturing the IR edges, my timer interrupt stopped firing completely. The watchdog never got reset, so the car timed out constantly.
-    The capture flag CC1IF clears when CCR1 is read, and the DMA reads CCR1 on every edge, so the flag was gone before the CPU could see it.
-  </p>
-  <p>
-    I fixed it by mapping a second capture channel (IC2) onto the same input pin. Every edge now sets two flags:
-    DMA consumes CC1IF, and the CPU gets CC2IF, which nothing else touches.
-  </p>
+  <section class="card bug">
+    <h3>DMA was eating my interrupt flag</h3>
+    <p>
+      Once DMA was capturing the IR edges, my timer interrupt stopped firing completely. The watchdog never got reset, so the car timed out constantly.
+      The capture flag CC1IF clears when CCR1 is read, and the DMA reads CCR1 on every edge, so the flag was gone before the CPU could see it.
+    </p>
+    <p>
+      I fixed it by mapping a second capture channel (IC2) onto the same input pin. Every edge now sets two flags:
+      DMA consumes CC1IF, and the CPU gets CC2IF, which nothing else touches.
+    </p>
+  </section>
 
-  <h3>Motors wouldn't spin below 77% duty</h3>
-  <p>
-    At 20&nbsp;kHz the motors had a huge deadband, which left the PI loop almost nothing to work with.
-    I was pulsing IN1 and holding IN2 low, which puts the DRV8833 in fast decay during the off-time.
-    The coil current collapsed between every pulse, so most of each on-time went to building it back up.
-    Holding IN2 high and pulsing an inverted signal on IN1 switches the chip to slow decay instead.
-    The current keeps circulating between pulses, and the deadband dropped to 33%.
-  </p>
+  <section class="card bug">
+    <h3>Motors wouldn't spin below 77% duty</h3>
+    <p>
+      At 20&nbsp;kHz the motors had a huge deadband, which left the PI loop almost nothing to work with.
+      I was pulsing IN1 and holding IN2 low, which puts the DRV8833 in fast decay during the off-time.
+      The coil current collapsed between every pulse, so most of each on-time went to building it back up.
+      Holding IN2 high and pulsing an inverted signal on IN1 switches the chip to slow decay instead.
+      The current keeps circulating between pulses, and the deadband dropped to 33%.
+    </p>
+  </section>
 
-  <h3>The car would coast to a stop and never restart</h3>
-  <p>
-    Speed came from the time between encoder edges. When a wheel stopped, the edges stopped too, so the last reading (fast) stayed there forever.
-    The controller thought the car was cruising and kept the duty too low to overcome static friction.
-    Now a 1&nbsp;kHz check compares TIM2's counter to the last capture, and if 200&nbsp;ms pass with no edge, the wheel is treated as stopped.
-  </p>
+  <section class="card bug">
+    <h3>The car would coast to a stop and never restart</h3>
+    <p>
+      Speed came from the time between encoder edges. When a wheel stopped, the edges stopped too, so the last reading (fast) stayed there forever.
+      The controller thought the car was cruising and kept the duty too low to overcome static friction.
+      Now a 1&nbsp;kHz check compares TIM2's counter to the last capture, and if 200&nbsp;ms pass with no edge, the wheel is treated as stopped.
+    </p>
+  </section>
 
-  <h3>The first move after boot lasted three times too long</h3>
-  <p>
-    The timer prescaler and auto-reload registers are buffered: a new value doesn't take effect until the next update event.
-    So the first timeout ran with the reset value of ARR (655&nbsp;ms instead of 200&nbsp;ms).
-    Setting the UG bit at the end of timer init forces an update and loads the new values immediately.
-  </p>
+  <section class="card bug">
+    <h3>The first move after boot lasted three times too long</h3>
+    <p>
+      The timer prescaler and auto-reload registers are buffered: a new value doesn't take effect until the next update event.
+      So the first timeout ran with the reset value of ARR (655&nbsp;ms instead of 200&nbsp;ms).
+      Setting the UG bit at the end of timer init forces an update and loads the new values immediately.
+    </p>
+  </section>
 
-  <h3>Smaller ones</h3>
-  <ul class="plain">
-    <li>A uint8_t speed parameter wrapped −50 into 206, which meant full throttle instead of stop. It's an int32_t now, clamped in the driver.</li>
-    <li>Disabling a DMA stream mid-transfer sets its transfer-complete flag, which sent my reset interrupt into a loop. I now stop the timer's DMA requests before touching the stream.</li>
-    <li>A printf inside an interrupt made a race condition disappear, because the UART delay covered up the timing problem. I toggle a GPIO and watch it on the scope instead.</li>
-    <li>Header pins pushed into the motor driver boards without solder gave floating outputs. They worked once they were soldered.</li>
-  </ul>
+  <section class="card bug">
+    <h3>Smaller ones</h3>
+    <ul class="plain">
+      <li>A uint8_t speed parameter wrapped −50 into 206, which meant full throttle instead of stop. It's an int32_t now, clamped in the driver.</li>
+      <li>Disabling a DMA stream mid-transfer sets its transfer-complete flag, which sent my reset interrupt into a loop. I now stop the timer's DMA requests before touching the stream.</li>
+      <li>A printf inside an interrupt made a race condition disappear, because the UART delay covered up the timing problem. I toggle a GPIO and watch it on the scope instead.</li>
+      <li>Header pins pushed into the motor driver boards without solder gave floating outputs. They worked once they were soldered.</li>
+    </ul>
+  </section>
 
-  <p style="margin-top: 48px"><a href="./">&larr; Back</a></p>
+  <div class="buttons" style="margin-top: 48px">
+    <a class="btn solid" href="./">&larr; Back to all projects</a>
+    <a class="btn outline" href="https://github.com/jacob-nguyen1/stm32-baremetal-rc-car">Source</a>
+  </div>
 </main>
 
+<footer class="footer">
+  <div class="wrap">
+    <p class="footer-name">Jacob Nguyen</p>
+    <p class="links">
+      <a href="mailto:jacobnguyen.dev@gmail.com">jacobnguyen.dev@gmail.com</a>
+      <a href="https://github.com/jacob-nguyen1">GitHub</a>
+      <a href="https://www.linkedin.com/in/jacobnguyen7">LinkedIn</a>
+    </p>
+  </div>
+</footer>
+
 <dialog id="lightbox"><img alt=""></dialog>
-<script src="main.js?v=4"></script>
+<script src="main.js?v=5"></script>
 </body>
 </html>
