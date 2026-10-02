@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
@@ -20,8 +20,8 @@
   <div class="wrap nav-inner">
     <a class="brand" href="#top">jacob<span>.</span>nguyen</a>
     <nav>
-      <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
       <a href="Jacob_Nguyen_Resume.pdf" target="_blank" rel="noopener">Resume</a>
     </nav>
   </div>
@@ -53,52 +53,9 @@
     <path d="M0 45 H60 V15 H120 V45 H180 V15 H240 V45 H300 V15 H360 V45 H420 V15 H480 V45 H540 V15 H600 V45 H660 V15 H720 V45 H780 V15 H840 V45 H900 V15 H960 V45 H1020 V15 H1080 V45 H1140 V15 H1200"/>
   </svg>
 
-  <!-- ============ EXPERIENCE ============ -->
-  <section id="experience" class="wrap section">
-    <h2><span class="addr">0x01</span> Experience</h2>
-
-    <article class="job">
-      <div class="job-head">
-        <div>
-          <h3>Embedded Software Engineer Intern</h3>
-          <p class="org">NASA Armstrong Flight Research Center &middot; Edwards AFB, CA</p>
-        </div>
-        <p class="when">Aug 2026 &ndash; Present</p>
-      </div>
-      <p class="summary">Embedded Linux and flight software: a Yocto BSP for a PolarFire RISC-V SoC, cFS modules in C,
-        and Zephyr firmware on STM32 for the Raven eVTOL research aircraft.</p>
-      <p class="tags"><span>C</span><span>Yocto</span><span>RISC-V</span><span>cFS</span><span>Zephyr</span><span>STM32</span></p>
-    </article>
-
-    <article class="job">
-      <div class="job-head">
-        <div>
-          <h3>Firmware Engineer</h3>
-          <p class="org">Gator Motorsports (FSAE), University of Florida</p>
-        </div>
-        <p class="when">Oct 2025 &ndash; May 2026</p>
-      </div>
-      <p class="summary">Wrote the team's CAN FD driver for the NXP i.MX RT1176 in <code>no_std</code> Rust, replacing
-        the vendor C SDK wrappers: async transmit over a pool of hardware mailboxes and interrupt-driven receive.</p>
-      <p class="tags"><span>Rust</span><span>Embassy</span><span>CAN FD</span><span>i.MX RT1176</span></p>
-    </article>
-
-    <article class="job">
-      <div class="job-head">
-        <div>
-          <h3>Teaching Assistant, Digital Logic</h3>
-          <p class="org">Herbert Wertheim College of Engineering, UF</p>
-        </div>
-        <p class="when">Jan 2026 &ndash; May 2026</p>
-      </div>
-      <p class="summary">Ran a weekly lab section, from basic gates up to a CPU, and helped students debug breadboards
-        and FPGA designs in office hours.</p>
-    </article>
-  </section>
-
   <!-- ============ PROJECTS ============ -->
   <section id="projects" class="wrap section">
-    <h2><span class="addr">0x02</span> Projects</h2>
+    <h2><span class="addr">0x01</span> Projects</h2>
 
     <!-- RC car: featured -->
     <article class="project featured">
@@ -212,6 +169,34 @@
     </ul>
   </section>
 
+  <!-- ============ EXPERIENCE ============ -->
+  <section id="experience" class="wrap section">
+    <h2><span class="addr">0x02</span> Experience</h2>
+    <ul class="xp">
+      <li>
+        <p class="when">Aug 2026 &ndash; now</p>
+        <div>
+          <h3>NASA Armstrong Flight Research Center <span>Embedded Software Intern</span></h3>
+          <p>Yocto BSP for a PolarFire RISC-V SoC, cFS flight software modules, and Zephyr firmware for the Raven eVTOL research aircraft.</p>
+        </div>
+      </li>
+      <li>
+        <p class="when">Oct 2025 &ndash; May 2026</p>
+        <div>
+          <h3>Gator Motorsports (FSAE) <span>Firmware Engineer</span></h3>
+          <p>Wrote the team's CAN FD driver for the NXP i.MX RT1176 in <code>no_std</code> Rust, replacing the vendor C SDK wrappers.</p>
+        </div>
+      </li>
+      <li>
+        <p class="when">Jan &ndash; May 2026</p>
+        <div>
+          <h3>University of Florida <span>Digital Logic TA</span></h3>
+          <p>Ran a weekly lab section from basic gates up to a CPU, and debugged students' breadboards and FPGA designs.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
   <!-- ============ SKILLS ============ -->
   <section class="wrap section">
     <h2><span class="addr">0x03</span> Toolbox</h2>
@@ -237,6 +222,6 @@
   <button class="close" aria-label="Close">&times;</button>
 </dialog>
 
-<script src="main.js?v=2"></script>
+<script src="main.js?v=3"></script>
 </body>
 </html>

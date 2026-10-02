@@ -227,3 +227,16 @@ dialog#lightbox .close {
 }
 .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 0; }
 .featured .tags { margin-top: 18px; }
+
+/* compact experience rows */
+.xp { list-style: none; padding: 0; margin: 0; }
+.xp li { display: grid; grid-template-columns: 150px 1fr; gap: 24px; padding: 16px 0; border-top: 1px solid var(--line); margin: 0; }
+.xp li:first-child { border-top: 0; padding-top: 0; }
+.xp .when { padding-top: 3px; white-space: normal; }
+.xp h3 { font-size: 1.05rem; }
+.xp h3 span { display: inline-block; margin-left: 8px; font-weight: 400; color: var(--muted); font-size: 0.95rem; }
+.xp p { margin: 4px 0 0; }
+@media (max-width: 600px) {
+  .xp li { grid-template-columns: 1fr; gap: 2px; }
+  .xp h3 span { display: block; margin: 2px 0 0; }
+}
