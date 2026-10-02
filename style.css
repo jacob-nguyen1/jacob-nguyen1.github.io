@@ -116,14 +116,15 @@ h2::after {
 .thumbs img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform 0.3s; }
 .thumbs button:hover img { transform: scale(1.05); }
 
-/* Pong + SwampRise */
-.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
-.pong, .card-media { width: 100%; height: 230px; }
-.pong { background: var(--navy); }
-.card-media { position: relative; display: block; overflow: hidden; background: #000; }
+/* Pong (text only) + SwampRise (media left) */
+.text-card { margin-top: 24px; padding: 26px 32px 30px; border-left: 4px solid var(--accent); }
+.text-card p:last-child { max-width: 80ch; }
+.wide { display: grid; grid-template-columns: 400px 1fr; margin-top: 24px; }
+.wide .card-body { padding: 26px 32px 30px; }
+.card-media { position: relative; display: block; width: 100%; height: 100%; min-height: 260px; overflow: hidden; background: #000; }
 .card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
 .card-media:hover img { transform: scale(1.04); }
-.pair iframe { width: 100%; height: 230px; border: 0; display: block; }
+.wide iframe { width: 100%; height: 100%; min-height: 260px; border: 0; display: block; }
 .play {
   position: absolute; inset: 0; margin: auto; width: 64px; height: 64px; border-radius: 50%;
   background: var(--accent); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35); transition: transform 0.15s;
@@ -195,7 +196,9 @@ dialog#lightbox img { max-width: 94vw; max-height: 94vh; border-radius: 8px; bac
   .featured { grid-template-columns: 1fr; }
   .featured-video video { min-height: 0; height: 460px; }
   .featured-body { padding: 24px; }
-  .pair, .smalls, .xp { grid-template-columns: 1fr; }
+  .wide, .smalls, .xp { grid-template-columns: 1fr; }
+  .card-media, .wide iframe { min-height: 220px; height: 220px; }
+  .text-card, .wide .card-body { padding: 22px 24px 26px; }
 }
 @media (max-width: 600px) {
   body { font-size: 16px; }

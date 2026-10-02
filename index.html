@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -72,40 +72,35 @@
       </div>
     </article>
 
-    <div class="pair">
-      <article class="card">
-        <canvas class="pong" aria-label="Animated Pong court" role="img"></canvas>
-        <div class="card-body">
-          <h3>VGA Pong</h3>
-          <p class="meta">DE10-Lite FPGA &middot; SystemVerilog &middot; 2026</p>
-          <p>
-            Two-player Pong entirely in hardware, with no CPU. It generates 640&times;480 VGA timing from a 25&nbsp;MHz
-            pixel clock, runs the game as a state machine, and draws sprites from block RAM, with an extra pipeline
-            stage to line up the RAM's one-cycle read delay with the pixel position.
-          </p>
-        </div>
-      </article>
+    <article class="card text-card">
+      <h3>VGA Pong</h3>
+      <p class="meta">DE10-Lite FPGA &middot; SystemVerilog &middot; 2026</p>
+      <p>
+        Two-player Pong entirely in hardware, with no CPU. It generates 640&times;480 VGA timing from a 25&nbsp;MHz
+        pixel clock, runs the game as a state machine, and draws sprites from block RAM, with an extra pipeline
+        stage to line up the RAM's one-cycle read delay with the pixel position.
+      </p>
+    </article>
 
-      <article class="card">
-        <button class="yt card-media" data-id="9dNYDrCkIwc" aria-label="Play the SwampRise demo video">
-          <img src="assets/img/swamprise-lcd.jpg" alt="LCD showing live bus arrival times" loading="lazy">
-          <span class="play" aria-hidden="true"></span>
-        </button>
-        <div class="card-body">
-          <h3>SwampRise</h3>
-          <p class="meta">ESP32 &middot; FreeRTOS &middot; 2026</p>
-          <p>
-            A hackathon alarm clock that follows live campus bus data and moves your alarm if the bus is running late,
-            with a DS3231 clock, an LCD, and a 7-segment display. It won Best Integration of Hardware at SwampHacks XI.
-          </p>
-          <p class="links">
-            <a href="https://devpost.com/software/swamp-rise">Devpost</a>
-            <button class="zoom textlink" data-full="assets/img/swamprise-schematic.png">Schematic</button>
-            <a href="https://github.com/ethantayl/SwampRise">Source</a>
-          </p>
-        </div>
-      </article>
-    </div>
+    <article class="card wide">
+      <button class="yt card-media" data-id="9dNYDrCkIwc" aria-label="Play the SwampRise demo video">
+        <img src="assets/img/swamprise-lcd.jpg" alt="LCD showing live bus arrival times" loading="lazy">
+        <span class="play" aria-hidden="true"></span>
+      </button>
+      <div class="card-body">
+        <h3>SwampRise</h3>
+        <p class="meta">ESP32 &middot; FreeRTOS &middot; 2026</p>
+        <p>
+          A hackathon alarm clock that follows live campus bus data and moves your alarm if the bus is running late,
+          with a DS3231 clock, an LCD, and a 7-segment display. It won Best Integration of Hardware at SwampHacks XI.
+        </p>
+        <p class="links">
+          <a href="https://devpost.com/software/swamp-rise">Devpost</a>
+          <button class="zoom textlink" data-full="assets/img/swamprise-schematic.png">Schematic</button>
+          <a href="https://github.com/ethantayl/SwampRise">Source</a>
+        </p>
+      </div>
+    </article>
 
     <div class="smalls">
       <a class="card small" href="https://github.com/jacob-nguyen1/rtos-scheduler">
@@ -161,6 +156,6 @@
 </footer>
 
 <dialog id="lightbox"><img alt=""></dialog>
-<script src="main.js?v=5"></script>
+<script src="main.js?v=6"></script>
 </body>
 </html>
